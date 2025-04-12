@@ -1,41 +1,26 @@
-# Use Python 3.9 as base image
-FROM python:3.9-slim
+# Use an official Python runtime as a parent image
+FROM python:3.10-slim
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    DEBIAN_FRONTEND=noninteractive
+# Install netcat
+RUN apt-get update && apt-get install -y netcat-openbsd && apt-get clean
 
-# Set work directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        build-essential \
-        python3-dev \
-        libpq-dev \
-        netcat-traditional \
-        postgresql-client \
-        dnsutils \
-        iputils-ping \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Copy the requirements file into the container
+COPY requirements.txt /app/
 
-# Copy requirements first to leverage Docker cache
-COPY ./adpa_backend/requirements.txt .
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir django-filter==23.5  # Add explicit installation
+# Copy the current directory contents into the container at /app
+COPY . /app
 
-# Copy the entrypoint script
-COPY ./adpa_backend/docker-entrypoint.sh .
-RUN chmod +x docker-entrypoint.sh
+# Make the entrypoint script executable
+RUN chmod +x /app/docker-entrypoint.sh
 
-# Copy the project files
-COPY ./adpa_backend .
+# Expose port 8000 for the Django app
+EXPOSE 8000
 
-# Run entrypoint script
-ENTRYPOINT ["./docker-entrypoint.sh"] 
+# Run the entrypoint script
+ENTRYPOINT ["/app/docker-entrypoint.sh"] 

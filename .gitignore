@@ -1,0 +1,61 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff
+*.log
+*.pot
+*.pyc
+db.sqlite3
+media/
+staticfiles/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# Node / Frontend (if applicable)
+node_modules/
+package-lock.json
+
+# Coverage reports
+.coverage
+htmlcov/
+
+# Database migrations (optional, sometimes you want to keep them)
+# migrations/
+
+# Local settings (sensitive info)
+local_settings.py
+settings/local.py
+
+# macOS files
+.DS_Store
+
+# pytest cache
+.pytest_cache/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# PyCharm
+.idea/
+*.iml
+
+# Jupyter Notebook
+.ipynb_checkpoints/

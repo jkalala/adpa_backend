@@ -51,6 +51,24 @@ INSTALLED_APPS = [
     'members',
     'emailutils.apps.EmailutilsConfig',
     'django_filters',
+    'django.contrib.sites',
+
+    # Third-party apps
+   
+    'rest_framework.authtoken',
+   
+    
+    # Allauth apps
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    
+    # Social providers (at least google)
+    'allauth.socialaccount.providers.google',
+
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    
 ]
 
 
@@ -107,6 +125,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     
 ]
 
@@ -202,6 +221,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
@@ -209,6 +229,11 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
+}
+
+# REST Auth settings
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'api.serializers.CustomRegisterSerializer',
 }
 
 # JWT settings
@@ -245,6 +270,8 @@ SIMPLE_JWT = {
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 )
 
 # Google OAuth2 settings
@@ -320,3 +347,12 @@ SWAGGER_SETTINGS = {
 RECAPTCHA_SITE_KEY = '6Ldcbg0rAAAAAD-2IVwvn-mLTxbNC0o-ag9jwUUm'
 RECAPTCHA_SECRET_KEY = '6Ldcbg0rAAAAAFWwwqPWOXLXWZRPXxGQqGxpPKKB'  # Replace with your actual secret key
 RECAPTCHA_REQUIRED_SCORE = 0.5
+
+# Allauth settings
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'optional'  # or 'mandatory'
+
+# Required for allauth
+SITE_ID = 1
